@@ -3,6 +3,13 @@ const handlebars = require('express-handlebars')
 const app = express();
 const http = require('http').Server(app)
 const productos = require('./api/productos')
+const options = require('./config/sqlite3')
+const knex = require ('knex')(options);
+
+const tablaMensaje = require ('./api/mensajes')
+
+productos.crearTabla();
+tablaMensaje.crearTabla();
 
 const fs = require('fs')
 
@@ -24,6 +31,7 @@ let messages = fs.readFileSync('./public/archivo.txt', "utf-8");
 messages = JSON.parse(messages);
 console.log(messages);
 io.on('connection', async socket => {
+    
     console.log('Nuevo cliente conectado')
     io.sockets.emit('messages', messages)
     socket.emit('productos', productos.listar())
@@ -33,8 +41,13 @@ io.on('connection', async socket => {
     
     socket.on('new-message', message =>{
     messages.push(message)
-    console.log(messages);
-    fs.writeFileSync('./public/archivo.txt', JSON.stringify(messages));
+    console.log(messages)
+    knex('mensajes').insert(message).then(() => console.log('mensaje insertado')).catch((err) => { console.log(err); throw err})
+    .finally(() => {
+        knex.destroy();
+    });
+
+    //fs.writeFileSync('./public/archivo.txt', JSON.stringify(messages));
         io.sockets.emit('messages', messages)
         });
     })

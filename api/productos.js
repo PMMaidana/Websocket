@@ -1,6 +1,18 @@
+const options = require('../config/mariaDB')
+const knex = require ('knex')(options);
+
 class Productos{
     constructor(){
         this.productos = [];
+    }
+
+    crearTabla(){
+        knex.schema.createTable('productos', table => {
+            table.increments('id')
+            table.string('producto')
+            table.integer('precio')
+            table.string('url')
+        })
     }
 
     listar(){        
@@ -18,6 +30,12 @@ class Productos{
     guardar(producto){
         const largo = this.productos.length;
         this.productos.push({...producto,id:largo+1});
+        knex.from('productos').insert(this.productos)
+        .then(() => console.log('producto agregado'))
+        .catch((err) => {console.log(err); throw err })
+        .finally(() => {
+            knex.destroy();
+        })
         return this.productos[largo];
     }
        
