@@ -24,13 +24,17 @@ class Productos{
         if(producto==undefined){
             producto = 'Producto no encontrado';
         }
-        return producto;
+        //return producto;
+        knex.from('productos').select('*').where('id', id)
+        .then((row)=> {
+            console.log(row);
+        })
     }
 
     guardar(producto){
-        const largo = this.productos.length;
-        this.productos.push({...producto,id:largo+1});
-        knex.from('productos').insert(this.productos)
+        //const largo = this.productos.length;
+        //this.productos.push({...producto,id:largo+1});
+        knex.from('productos').insert(producto)
         .then(() => console.log('producto agregado'))
         .catch((err) => {console.log(err); throw err })
         .finally(() => {
@@ -53,10 +57,16 @@ class Productos{
 
     actualizar(id, producto){
         try {
-            const indice = this.productos.findIndex(item => item.id == id);
-            this.productos[indice].title = producto.title;
-            this.productos[indice].price = producto.price;
-            this.productos[indice].thumbnail = producto.thumbnail;
+            knex.from('productos').where({'id':id}).update({
+                precio: producto.precio,
+                producto: producto.producto
+            })
+            .then(()=> {
+                console.log('updateado');
+            })
+            .finally(()=> {
+                knex.destroy()
+            })
             return this.productos[indice];
         } catch (error) {
             return [{

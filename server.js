@@ -42,10 +42,6 @@ io.on('connection', async socket => {
     socket.on('new-message', message =>{
     messages.push(message)
     console.log(messages)
-    knex('mensajes').insert(message).then(() => console.log('mensaje insertado')).catch((err) => { console.log(err); throw err})
-    .finally(() => {
-        knex.destroy();
-    });
 
     //fs.writeFileSync('./public/archivo.txt', JSON.stringify(messages));
         io.sockets.emit('messages', messages)
@@ -59,7 +55,9 @@ app.use((err, req, res, next) =>{
 });
 
 const router = require('./routes/routes');
+const routerMensaje = require('./routes/routesmensaje');
 app.use('/api', router);
+app.use('/api', routerMensaje)
 
 const PORT = process.env.PORT || 8081;
 

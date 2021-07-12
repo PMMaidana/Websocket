@@ -12,6 +12,22 @@ class Mensaje {
         
     })
     }
+
+    listar(){        
+        knex.from('mensajes').select('*')
+        .then((row)=> {
+            console.log(row);
+        })
+    }
+
+    guardarMensaje(message){
+        knex('mensajes').insert(message)
+        .then(() => console.log('mensaje insertado'))
+        .catch((err) => { console.log(err); throw err})
+        .finally(() => {
+        knex.destroy();
+        });
+    }
     
 };
 
