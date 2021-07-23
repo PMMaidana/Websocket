@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
-const controller = require('../api/productosMongo')
+const controller = require('../api/productos')
+const test = require('../api/mocktest')
 
 router.get('/', (req, res) => {
     res.send('Bienvenido al servidor express');
@@ -59,5 +60,15 @@ router.get('/productos/vista', (req, res) => {
         res.status(500).send(error.message);
     }
 });
+
+router.get('/productos/test-vista', (req, res) => {
+    try {
+        console.log(test)
+        res.render('vista', { productos: test.mockGenerator(), hayProductos: 1});
+    } catch (error) {
+        res.status(500).send(error.message)
+    }
+    
+})
 
 module.exports = router;

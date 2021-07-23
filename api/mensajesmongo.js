@@ -29,11 +29,6 @@ class Mensaje {
         return MyModel.create(mensaje);
     }
 
-    /* async actualizar(id, update) {
-        await MyModel.findByIdAndUpdate({_id: id}, { $set: {update}});
-        console.log(`Mensaje ${id} actualizado correctamente`)
-    } */
-
     async borrar(id){
         await MyModel.findByIdAndDelete( { _id: id } )
     }
