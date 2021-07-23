@@ -61,10 +61,12 @@ router.get('/productos/vista', (req, res) => {
     }
 });
 
-router.get('/productos/test-vista', (req, res) => {
+router.get('/productos/test-vista/:numero?', (req, res) => {
     try {
-        console.log(test)
-        res.render('vista', { productos: test.mockGenerator(), hayProductos: 1});
+        let data = req.params.numero; if(data === undefined){data = 10}
+        test.mockGenerator(data);
+        let items = test.listar()
+        res.render('testview', {productos: items, hayProductos: items.length});
     } catch (error) {
         res.status(500).send(error.message)
     }
