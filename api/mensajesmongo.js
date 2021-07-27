@@ -3,12 +3,19 @@ const mongoose = require('mongoose');
 const uri = "mongodb://localhost:27017/ecommerce";
 
 const schema = mongoose.Schema({
-    mensaje: { type: String, max: 400},
-    user: { type: String, require: true, max: 100 },
-    timestamp: { type: Date, default: new Date() }
+    author: [{
+        id: { type: String},
+        nombre: { type: String},
+        apellido: { type: String},
+        edad: { type: Number},
+        alias: { type: String},
+        avatar: { type: String}
+     }],
+    text: { type: String, require: true, max: 140 },
+    timestamp: { type: String, default: new Date().toLocaleString() }
 });
 
-const MyModel = mongoose.model('ecommerce', schema);
+const MyModel = mongoose.model('mensajes', schema); 
 
 async function connect() {
     try {await mongoose.connect("mongodb://localhost:27017/ecommerce", { useNewUrlParser: true, useUnifiedTopology: true });
@@ -22,7 +29,8 @@ connect();
 class Mensaje {
     constructor(){}
     async listar(){
-        return await MyModel.find({})
+        let mensajes = MyModel.find({})
+        return mensajes
     }
 
     async guardar(mensaje) {

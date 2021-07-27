@@ -3,13 +3,9 @@ const handlebars = require('express-handlebars')
 const app = express();
 const http = require('http').Server(app)
 const productos = require('./api/productos')
-const options = require('./config/sqlite3')
-const knex = require ('knex')(options);
 
-const tablaMensaje = require ('./api/mensajes')
+const MongoCrud = require ('./api/mensajesmongo')
 
-productos.crearTabla();
-tablaMensaje.crearTabla();
 
 const fs = require('fs')
 
@@ -27,26 +23,23 @@ app.engine('hbs', handlebars({
 app.set('view engine', 'hbs');
 app.set('views','./views');
 
-let messages = fs.readFileSync('./public/archivo.txt', "utf-8");
-messages = JSON.parse(messages);
-console.log(messages);
+
+
 io.on('connection', async socket => {
+    let messages = MongoCrud.listar().then(data => { return data })
+    .then(data => {io.sockets.emit('messages', data)});
+    console.log('Nuevo cliente conectado');
     
-    console.log('Nuevo cliente conectado')
-    io.sockets.emit('messages', messages)
+    
+    
     socket.emit('productos', productos.listar())
-    
     socket.on('update', data => {
         io.sockets.emit('productos', productos.listar())
-    
-    socket.on('new-message', message =>{
-    messages.push(message)
-    console.log(messages)
-
-    //fs.writeFileSync('./public/archivo.txt', JSON.stringify(messages));
-        io.sockets.emit('messages', messages)
-        });
     })
+
+    socket.on('new-message', message =>{
+    MongoCrud.guardar(message).then((data) => {io.sockets.emit('messages', data)}); 
+    });
 })
 
 app.use((err, req, res, next) =>{

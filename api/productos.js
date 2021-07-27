@@ -32,15 +32,16 @@ class Productos{
     }
 
     guardar(producto){
-        //const largo = this.productos.length;
-        //this.productos.push({...producto,id:largo+1});
-        knex.from('productos').insert(producto)
+        const largo = this.productos.length;
+        this.productos.push({...producto,id:largo+1});
+        console.log(producto)
+        /* knex.from('productos').insert(producto)
         .then(() => console.log('producto agregado'))
         .catch((err) => {console.log(err); throw err })
         .finally(() => {
             knex.destroy();
         })
-        return this.productos[largo];
+        return this.productos[largo]; */
     }
        
     borrar(id){

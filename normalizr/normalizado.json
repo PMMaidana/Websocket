@@ -1,0 +1,76 @@
+{
+   "entities": {
+      "mensajes": {
+         "undefined": {
+            "0": {
+               "timestamp": "27/7/2021 19:41:14",
+               "_id": "61008b8dfdb9591bb8121f16",
+               "author": [
+                  {
+                     "_id": "61008b8dfdb9591bb8121f17",
+                     "id": "maidana.martin91@gmail.com",
+                     "nombre": "Martin",
+                     "apellido": "Maidana",
+                     "edad": 29,
+                     "alias": "Kise07",
+                     "avatar": "https://www.shankarainfra.com/img/avatar.png"
+                  }
+               ],
+               "text": "Hola",
+               "__v": 0
+            },
+            "1": {
+               "timestamp": "27/7/2021 19:41:14",
+               "_id": "61008ba1fdb9591bb8121f1a",
+               "author": [
+                  {
+                     "_id": "61008ba1fdb9591bb8121f1b",
+                     "id": "maidana.martin91@gmail.com",
+                     "nombre": "Martin",
+                     "apellido": "Maidana",
+                     "edad": 29,
+                     "alias": "Coichi",
+                     "avatar": "https://www.shankarainfra.com/img/avatar.png"
+                  }
+               ],
+               "text": "yee-haw",
+               "__v": 0
+            },
+            "2": {
+               "timestamp": "27/7/2021 19:51:38",
+               "_id": "61008e0431239e3120397aff",
+               "author": [
+                  {
+                     "_id": "61008e0431239e3120397b00",
+                     "id": "maidana.martin91@gmail.com",
+                     "nombre": "Martin",
+                     "apellido": "Maidana",
+                     "edad": 29,
+                     "alias": "Kise07",
+                     "avatar": "https://www.shankarainfra.com/img/avatar.png"
+                  }
+               ],
+               "text": "yee-haw",
+               "__v": 0
+            },
+            "3": {
+               "timestamp": "27/7/2021 19:52:37",
+               "_id": "61008e47f2a7fa2bac2799fb",
+               "author": [
+                  {
+                     "_id": "61008e47f2a7fa2bac2799fc",
+                     "id": "maidana.martin91@gmail.com",
+                     "nombre": "Martin",
+                     "apellido": "Maidana",
+                     "edad": 29,
+                     "alias": "Kise07",
+                     "avatar": "https://www.shankarainfra.com/img/avatar.png"
+                  }
+               ],
+               "text": "Hola",
+               "__v": 0
+            }
+         }
+      }
+   }
+}

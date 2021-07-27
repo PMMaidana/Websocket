@@ -26,6 +26,7 @@ class testProductos {
     this.productos.push(testprod);
         }
     return console.log(`generados ${num} productos`)
+    
     }
 
     listar() {

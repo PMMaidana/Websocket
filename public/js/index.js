@@ -4,10 +4,6 @@ socket.on('productos', function (productos) {
     console.log('productos socket client')
     document.getElementById('datos').innerHTML = tabla(productos)
 })
-socket.on('historial', function (historialMensajes){
-    console.log('Historial cargado');
-    document.getElementById('messages').innerHTML = historialMensajes
-})
 
 const form = document.querySelector('form');
 
@@ -22,7 +18,7 @@ form.addEventListener('submit', event => {
         method: 'POST',
         body: JSON.stringify(data)
     })
-    .then(respuesta => respuesta.json())
+    //.then(respuesta => respuesta.json())
     .then(productos => {
         form.reset();
         socket.emit('update', 'ok');
@@ -65,34 +61,4 @@ function tabla(productos) {
     var template = Handlebars.compile(plantilla);
     let html = template({ productos: productos, hayProductos: productos.length });
     return html;
-}
-
-socket.on('messages', data =>{
-    console.log(data);
-    render(data);
-})
-
-function render(data) {
-    let hora = new Date().toLocaleString();
-    var html = data.map(el => {
-        return (`
-        <div>
-            <strong><span style="color:blue">${el.author}</span></strong>
-            <span style="color:brown">${hora}</span>:
-            <span style="color:green"><em>${el.texto}</em></span>
-        </div>`)
-    }).join(' ');
-
-    document.getElementById("messages").innerHTML = html;
-}
-
-function addMessage(e) {
-    console.log(Date.now())
-    let message = {
-        author: document.getElementById('username').value,
-        texto: document.getElementById('texto').value,
-        hora: new Date().toLocaleString()
-    }
-    socket.emit('new-message', message)
-    return false;
 }
