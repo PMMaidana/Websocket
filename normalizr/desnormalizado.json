@@ -1,0 +1,29 @@
+{
+   "id": "mensajes",
+   "mensajes": [
+      {
+         "timestamp": "27/7/2021 19:41:14",
+         "_id": "61008b8dfdb9591bb8121f16",
+         "text": "Hola",
+         "__v": 0
+      },
+      {
+         "timestamp": "27/7/2021 19:41:14",
+         "_id": "61008ba1fdb9591bb8121f1a",
+         "text": "yee-haw",
+         "__v": 0
+      },
+      {
+         "timestamp": "27/7/2021 19:51:38",
+         "_id": "61008e0431239e3120397aff",
+         "text": "yee-haw",
+         "__v": 0
+      },
+      {
+         "timestamp": "27/7/2021 19:52:37",
+         "_id": "61008e47f2a7fa2bac2799fb",
+         "text": "Hola",
+         "__v": 0
+      }
+   ]
+}

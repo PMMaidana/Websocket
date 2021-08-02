@@ -3,19 +3,26 @@ const MongoCrud = require('../api/mensajesmongo');
 const fs = require('fs');
 
 async function Normalizar() {
-    let data = await MongoCrud.listar()
-    console.log(data);
+    let mensajes = await MongoCrud.listar()
+    let mensajesConId = {
+        id: 'mensajes',
+        mensajes : mensajes.map ( mensaje => ({...mensaje._doc}))
+    }
+    console.log(mensajesConId);
+    const mensajesConIdN = normalize(mensajesConId, schemaMensajes);
+    fs.writeFileSync('./normalizado.json', JSON.stringify(mensajesConIdN, null, 3));
+    return mensajesConIdN;
+};
 
-const author = new schema.Entity('author');
 
-const mensajes = new schema.Entity('mensajes', {
-    mensajes: author,
-    id: [author]
-})
-const normalizedData = normalize(data, mensajes);
-console.log(JSON.stringify(normalizedData, null, 3));
-fs.writeFileSync('./normalizado.json', JSON.stringify(normalizedData, null, 3));
-}
+const schemaAutor = new schema.Entity('author', {}, {idAttribute: 'email'});
 
-Normalizar();
+const schemaMensaje = new schema.Entity('post', {
+    author: schemaAutor},{idAttribute: '_id'})
+
+const schemaMensajes = new schema.Entity('posts', {
+    mensajes: [schemaMensaje]
+    },{idAttribute: 'id'})
+
+const normalizedData = Normalizar();
 

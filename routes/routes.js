@@ -2,12 +2,46 @@ const express = require('express')
 const router = express.Router()
 const controller = require('../api/productos')
 const test = require('../api/mocktest')
+const path = require("path");
+const session = require('express-session');
+const bienvenida = require('../public/js/login')
 
-router.get('/', (req, res) => {
-    res.send('Bienvenido al servidor express');
+
+//middleware
+const auth = (req, res, next) => {
+    if (req.session.username) {
+        return next();
+    } else{
+        return res.status(401).send('no autorizado')
+    }
+}
+
+let usernames = []
+
+router.use(session({
+    secret: 'secreto',
+    resave: false,
+    saveUninitialized: false
+}))
+
+router.post('/submit',function(req, res){
+    let data = req.body.user;
+    req.session.username = JSON.stringify(data);
+    console.log('funciona' + data)
+    usernames.push(data);
+    res.redirect('../productos.html');
 });
 
-router.get('/productos/listar', (req, res) => {
+router.get('/cookies', (req, res) => {
+    res.send(`es: ${req.session.username}`)
+})
+
+router.delete('/logout', (req, res) =>{
+    req.session.destroy();
+    res.send('logout exitoso');
+})
+
+router.get('/productos/listar', auth, (req, res) => {
     try {
         res.status(200).send(controller.listar());    
     } catch (error) {
@@ -15,7 +49,7 @@ router.get('/productos/listar', (req, res) => {
     }
 });
 
-router.get('/productos/listar/:id', (req, res) => {
+router.get('/productos/listar/:id', auth, (req, res) => {
     try {
         res.send(controller.listarPorId(parseInt(req.params.id)));
     } catch (error) {
@@ -23,7 +57,7 @@ router.get('/productos/listar/:id', (req, res) => {
     }
 });
 
-router.post('/productos/guardar',(req, res)=>{
+router.post('/productos/guardar', auth, (req, res)=>{
     try {
         res.json(controller.guardar(req.body));
     } catch (error) {
@@ -31,7 +65,7 @@ router.post('/productos/guardar',(req, res)=>{
     }
 });
 
-router.put('/productos/actualizar/:id',(req,res)=>{
+router.put('/productos/actualizar/:id', auth, (req,res)=>{
     try {
         let update = {
             title: req.body.title,
@@ -44,7 +78,7 @@ router.put('/productos/actualizar/:id',(req,res)=>{
     }
 });
 
-router.delete('/productos/borrar/:id',(req,res)=>{
+router.delete('/productos/borrar/:id', auth, (req,res)=>{
     try {
         res.send(controller.borrar(req.params.id));
     } catch (error) {
@@ -52,7 +86,7 @@ router.delete('/productos/borrar/:id',(req,res)=>{
     }
 });
 
-router.get('/productos/vista', (req, res) => {
+router.get('/productos/vista', auth, (req, res) => {
     try {
         let items = controller.listar()
         res.render('vista', { productos: items, hayProductos: items.length});
@@ -61,7 +95,7 @@ router.get('/productos/vista', (req, res) => {
     }
 });
 
-router.get('/productos/test-vista/:numero?', (req, res) => {
+router.get('/productos/test-vista/:numero?', auth, (req, res) => {
     try {
         let data = req.params.numero; if(data === undefined){data = 10}
         test.mockGenerator(data);
@@ -74,3 +108,4 @@ router.get('/productos/test-vista/:numero?', (req, res) => {
 })
 
 module.exports = router;
+module.exports.usernames = usernames

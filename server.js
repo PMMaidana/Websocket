@@ -6,7 +6,6 @@ const productos = require('./api/productos')
 
 const MongoCrud = require ('./api/mensajesmongo')
 
-
 const fs = require('fs')
 
 const io = require('socket.io')(http)
@@ -28,7 +27,8 @@ app.set('views','./views');
 io.on('connection', async socket => {
     let messages = MongoCrud.listar().then(data => { return data })
     .then(data => {io.sockets.emit('messages', data)});
-    console.log('Nuevo cliente conectado');
+    console.log('Nuevo cliente conectado')
+    console.log(router.usernames);
     
     
     
