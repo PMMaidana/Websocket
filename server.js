@@ -14,10 +14,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true}));
 app.use(express.static(__dirname + '/public'));
 
-app.engine('hbs', handlebars({
-    extname: '.hbs',
-    defaultLayout: 'index.hbs',
-}));
+app.engine('hbs',
+            handlebars({
+                extname:".hbs",
+                defaultLayout:"index.hbs",
+                layoutsDir:__dirname + '/views/layouts/',
+                partialsDir:__dirname + '/views/partials/'
+            })
+    );
 
 app.set('view engine', 'hbs');
 app.set('views','./views');
@@ -27,8 +31,7 @@ app.set('views','./views');
 io.on('connection', async socket => {
     let messages = MongoCrud.listar().then(data => { return data })
     .then(data => {io.sockets.emit('messages', data)});
-    console.log('Nuevo cliente conectado')
-    console.log(router.usernames);
+    console.log('Nuevo cliente conectado');
     
     
     
@@ -42,6 +45,7 @@ io.on('connection', async socket => {
     });
 })
 
+
 app.use((err, req, res, next) =>{
     console.error(err.message);
     res.status(500).send('Algo se rompió!!');
@@ -49,8 +53,8 @@ app.use((err, req, res, next) =>{
 
 const router = require('./routes/routes');
 const routerMensaje = require('./routes/routesmensaje');
-app.use('/api', router);
-app.use('/api', routerMensaje)
+app.use('/', router);
+app.use('/', routerMensaje)
 
 const PORT = process.env.PORT || 8081;
 

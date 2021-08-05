@@ -4,19 +4,22 @@ const controller = require('../api/productos')
 const test = require('../api/mocktest')
 const path = require("path");
 const session = require('express-session');
-const bienvenida = require('../public/js/login')
+
+router.use(session({ resave: true ,secret: '123456' , saveUninitialized: true}));
 
 
 //middleware
 const auth = (req, res, next) => {
-    if (req.session.username) {
+    if (req.session.userName) {
         return next();
     } else{
-        return res.status(401).send('no autorizado')
+        res.render('login')
     }
 }
 
-let usernames = []
+router.get('/', auth, (req, res) => {
+    res.render('productos')
+})
 
 router.use(session({
     secret: 'secreto',
@@ -24,22 +27,27 @@ router.use(session({
     saveUninitialized: false
 }))
 
-router.post('/submit',function(req, res){
-    let data = req.body.user;
-    req.session.username = JSON.stringify(data);
-    console.log('funciona' + data)
-    usernames.push(data);
-    res.redirect('../productos.html');
+router.post('/logon',(req,res)=>{
+    let { userName } = req.body;
+    req.session.userName = userName;  
+    console.log(userName);
+    res.json({login : true});
 });
-
-router.get('/cookies', (req, res) => {
-    res.send(`es: ${req.session.username}`)
-})
 
 router.delete('/logout', (req, res) =>{
     req.session.destroy();
     res.send('logout exitoso');
 })
+
+router.get('/productos',async (req,res)=>{
+    try{                   
+        let items = await controller.listar();             
+        //let hayProductos = items.length == 0 ?false:true;
+        res.render("productos", { 'userName': req.session.userName});
+    } catch(err){
+        res.render("productos", {'hayProductos': false, 'productos': []});
+    }    
+});
 
 router.get('/productos/listar', auth, (req, res) => {
     try {
@@ -86,7 +94,7 @@ router.delete('/productos/borrar/:id', auth, (req,res)=>{
     }
 });
 
-router.get('/productos/vista', auth, (req, res) => {
+router.get('/productos/vista', (req, res) => {
     try {
         let items = controller.listar()
         res.render('vista', { productos: items, hayProductos: items.length});
@@ -95,7 +103,7 @@ router.get('/productos/vista', auth, (req, res) => {
     }
 });
 
-router.get('/productos/test-vista/:numero?', auth, (req, res) => {
+router.get('/productos/test-vista/:numero?', (req, res) => {
     try {
         let data = req.params.numero; if(data === undefined){data = 10}
         test.mockGenerator(data);
@@ -108,4 +116,3 @@ router.get('/productos/test-vista/:numero?', auth, (req, res) => {
 })
 
 module.exports = router;
-module.exports.usernames = usernames

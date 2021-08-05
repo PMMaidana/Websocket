@@ -10,7 +10,7 @@ const form = document.querySelector('form');
 form.addEventListener('submit', event => {
     event.preventDefault();
     const data = { title: form[0].value, price: form[1].value, thumbnail: form[2].value };
-
+    console.log(data)
     fetch('/api/productos/guardar', {
         headers: {
             'Content-Type': 'application/json'
@@ -63,4 +63,9 @@ function tabla(productos) {
     return html;
 }
 
-//----------------------------------------//
+//----------------------------------------------
+function btnLogOut(){
+    const btnLogout = document.getElementById('btnLogout');
+    console.log(btnLogout);
+    window.location.href = "api/logout"
+    }

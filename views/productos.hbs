@@ -1,18 +1,20 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulario de Ingreso de Productos</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+<div class="jumbotron">
+    <form action="api/logout" method="GET">
+        <div class="row">
+            <div class="col-sm">
+                <h1 class="text-success">Bienvenido {{userName}}</h1>
+            </div>
+            <div class="col-sm"></div>            
+            <div class="col-sm">
+                <button type="submit" name="logout"class="btn btn-warning" id="btnLogout">Desloguear</button>
+            </div>
+        </div>
+    </form>
+</div>
 
-</head>
-<body>
-    <div class="container mt-3">
-        <div class="jumbotron">
-    <div class="container mt-3">
+<div class="container mt-3">
         <div class="jumbotron">
             <h1>Ingrese Producto</h1>
             <br>
@@ -29,7 +31,7 @@
                     <label for="foto">Foto URL</label>
                     <input id="foto" class="form-control" type="text" name="thumbnail">
                 </div>
-                <button class="btn btn-success mt-3">Enviar</button>
+                <button class="btn btn-success mt-3" name="enviar_prod">Enviar</button>
             </form>
             <hr>
             <button class="btn btn-info mt-3" onclick="location.href = '/api/productos/vista'">Vista handlebars productos</button>
@@ -37,12 +39,7 @@
             <br>
             <div id="datos"></div>
         </div>
-    </div>
 
     <a href="./mensajes.html"><button class="btn btn-info mt-3"> Centro de Mensajes </button></a>
-
+</div>
     <script src="js/index.js"></script>
-    <script src="js/login.js"></script>
-
-</body>
-</html>
