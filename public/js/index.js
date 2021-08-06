@@ -67,5 +67,5 @@ function tabla(productos) {
 function btnLogOut(){
     const btnLogout = document.getElementById('btnLogout');
     console.log(btnLogout);
-    window.location.href = "api/logout"
+    window.location.href = "/logout"
     }

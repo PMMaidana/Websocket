@@ -2,10 +2,28 @@ const express = require('express')
 const router = express.Router()
 const controller = require('../api/productos')
 const test = require('../api/mocktest')
-const path = require("path");
 const session = require('express-session');
 
-router.use(session({ resave: true ,secret: '123456' , saveUninitialized: true}));
+const MongoStore = require('connect-mongo')
+const advancedOptions = { useNewUrlParser: true, useUnifiedTopology: true }
+
+
+router.use(session({
+    store: MongoStore.create({
+        //En Atlas connect App :  Make sure to change the node version to 2.2.12:
+        mongoUrl: 'mongodb+srv://root:root@cluster0.suzx1.mongodb.net/sesion?retryWrites=true&w=majority',
+        mongoOptions: advancedOptions,
+        ttl: 1000
+    }),
+    secret: 'secret',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        maxAge: 1000 * 60, // 1 min
+        sameSite: true,
+        secure: false
+      }
+}))
 
 
 //middleware
@@ -34,9 +52,11 @@ router.post('/logon',(req,res)=>{
     res.json({login : true});
 });
 
-router.delete('/logout', (req, res) =>{
+router.get('/logout', (req, res) =>{
+    let user = req.session.userName;
+    
     req.session.destroy();
-    res.send('logout exitoso');
+    res.render('logout',{'userName': user});
 })
 
 router.get('/productos',async (req,res)=>{
