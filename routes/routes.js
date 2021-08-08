@@ -25,51 +25,24 @@ router.use(session({
       }
 }))
 
-
-//middleware
-const auth = (req, res, next) => {
-    if (req.session.userName) {
-        return next();
-    } else{
-        res.render('login')
-    }
-}
-
-router.get('/', auth, (req, res) => {
-    res.render('productos')
-})
-
 router.use(session({
     secret: 'secreto',
     resave: false,
     saveUninitialized: false
 }))
 
-router.post('/logon',(req,res)=>{
-    let { userName } = req.body;
-    req.session.userName = userName;  
-    console.log(userName);
-    res.json({login : true});
-});
-
-router.get('/logout', (req, res) =>{
-    let user = req.session.userName;
-    
-    req.session.destroy();
-    res.render('logout',{'userName': user});
-})
-
 router.get('/productos',async (req,res)=>{
     try{                   
-        let items = await controller.listar();             
+        let items = await controller.listar();
         //let hayProductos = items.length == 0 ?false:true;
-        res.render("productos", { 'userName': req.session.userName});
+        var user = req.user;
+        res.render("productos", { username: user.username});
     } catch(err){
         res.render("productos", {'hayProductos': false, 'productos': []});
     }    
 });
 
-router.get('/productos/listar', auth, (req, res) => {
+router.get('/productos/listar', (req, res) => {
     try {
         res.status(200).send(controller.listar());    
     } catch (error) {
@@ -77,7 +50,7 @@ router.get('/productos/listar', auth, (req, res) => {
     }
 });
 
-router.get('/productos/listar/:id', auth, (req, res) => {
+router.get('/productos/listar/:id', (req, res) => {
     try {
         res.send(controller.listarPorId(parseInt(req.params.id)));
     } catch (error) {
@@ -85,7 +58,7 @@ router.get('/productos/listar/:id', auth, (req, res) => {
     }
 });
 
-router.post('/productos/guardar', auth, (req, res)=>{
+router.post('/productos/guardar', (req, res)=>{
     try {
         res.json(controller.guardar(req.body));
     } catch (error) {
@@ -93,7 +66,7 @@ router.post('/productos/guardar', auth, (req, res)=>{
     }
 });
 
-router.put('/productos/actualizar/:id', auth, (req,res)=>{
+router.put('/productos/actualizar/:id', (req,res)=>{
     try {
         let update = {
             title: req.body.title,
@@ -106,7 +79,7 @@ router.put('/productos/actualizar/:id', auth, (req,res)=>{
     }
 });
 
-router.delete('/productos/borrar/:id', auth, (req,res)=>{
+router.delete('/productos/borrar/:id', (req,res)=>{
     try {
         res.send(controller.borrar(req.params.id));
     } catch (error) {
