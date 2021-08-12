@@ -31,23 +31,8 @@ router.use(session({
     saveUninitialized: false
 }))
 
-router.get('/productos',async (req,res)=>{
-    try{                   
-        let items = await controller.listar();
-        //let hayProductos = items.length == 0 ?false:true;
-        var user = req.user;
-        res.render("productos", { username: user.username});
-    } catch(err){
-        res.render("productos", {'hayProductos': false, 'productos': []});
-    }    
-});
-
 router.get('/productos/listar', (req, res) => {
-    try {
-        res.status(200).send(controller.listar());    
-    } catch (error) {
-        res.status(500).send(error.message);
-    }
+    res.send(controller.listar());
 });
 
 router.get('/productos/listar/:id', (req, res) => {

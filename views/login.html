@@ -32,8 +32,10 @@
         </form>
 
         <hr>
+
         <div class="text-center"></div>
-          <button class="btn btn-success my-3" onclick="goSignup()">SIGNUP</button>
+          <button class="btn btn-success my-3" onclick="facebook()">Entrar con Facebook</button>
+          
         </div>
 
       </div>
@@ -43,6 +45,10 @@
     function redireccionar(pagina) {
         location.href = pagina;
     } 
+
+    function facebook() {
+      redireccionar('/auth/facebook');
+    }
 
     function goSignup() {
       redireccionar('/signup');

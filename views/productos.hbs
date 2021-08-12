@@ -2,7 +2,9 @@
 <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
 <div class="container text-center my-3">
     <div class="jumbotron" style="background-color: green;color: white;">
-        <h2><i>Bienvenido {{username}}</i></h2>
+        <h2><i>Bienvenido {{user.displayName}} 
+            {{email}} 
+            <img class="someClass" src="{{photo}}"></i></h2>
         <br>
         <button class="btn btn-danger my-5" onclick="logout()">LOGOUT</button>
     </div>
