@@ -5,8 +5,9 @@ const http = require('http').Server(app)
 const productos = require('./api/productos')
 const session = require('express-session');
 const MongoCrud = require ('./api/mensajesmongo')
-
+const { fork } = require('child_process');
 const io = require('socket.io')(http)
+
 
 const dotenv = require('dotenv');
 
@@ -148,7 +149,20 @@ app.get('/logout', (req, res) => {
   res.redirect('/');
 });
 
+app.get('/info', (req,res) => {
+let procesos = [process.argv, process.platform, process.version, process.memoryUsage(), process.cwd(), process.pid];
+res.send(procesos)
+});
 
+
+
+app.get('/randoms?', (req, res) => {
+  let cant = req.query.cant;
+  if (cant == undefined){
+    cant = 1000000000
+  }
+routes.randoms(cant)
+})
 //  FAIL ROUTE
 app.get('*', routes.failRoute);
 
@@ -162,5 +176,6 @@ const server = http.listen(PORT, () => {
 server.on('error', error => {
     console.error('Error de servidor: ', error);
 });
+
 
 module.exports = server;

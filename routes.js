@@ -73,6 +73,16 @@ function failRoute(req, res){
   res.status(404).render('routing-error', {});
 }
 
+const { fork } = require('child_process');
+
+function randoms(cant, res) {
+    const computo = fork('./computo.js');
+    computo.send(cant);
+    computo.on('message', random_generados => {
+    console.log(random_generados);
+})
+}
+
 module.exports = {
     getRoot,
     getLogin,
@@ -82,5 +92,6 @@ module.exports = {
     failRoute,
     getSignup,
     postSignup,
-    getFailsignup
+    getFailsignup,
+    randoms
 }
