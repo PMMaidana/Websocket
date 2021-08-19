@@ -5,7 +5,10 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server.js",
+    "pm2fork": "pm2 start server.js --name='server1' --watch",
+    "pm2cluster": "pm2 start server.js --name='server1 --watch -i max",
+    "forever": "forever start ./server.js"
   },
   "author": "",
   "license": "ISC",

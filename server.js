@@ -8,6 +8,12 @@ const MongoCrud = require ('./api/mensajesmongo')
 const { fork } = require('child_process');
 const io = require('socket.io')(http)
 
+//-------------------------FOREVER   PM2--------------------------
+const numCPUs = require('os').cpus().length;
+const PORT = parseInt(process.argv[2]) || 8080;
+//const SERVIDOR = parseInt(process.argv[2]) || 'pm2fork';
+
+//------------------------------------------------------------------
 
 const dotenv = require('dotenv');
 
@@ -150,7 +156,7 @@ app.get('/logout', (req, res) => {
 });
 
 app.get('/info', (req,res) => {
-let procesos = [process.argv, process.platform, process.version, process.memoryUsage(), process.cwd(), process.pid];
+let procesos = [process.argv, process.platform, process.version, process.memoryUsage(), process.cwd(), process.pid, numCPUs];
 res.send(procesos)
 });
 
@@ -167,12 +173,10 @@ routes.randoms(cant)
 app.get('*', routes.failRoute);
 
 
-const PORT = process.env.PORT || 8081;
-
 const server = http.listen(PORT, () => {
     console.log(`servidor corriendo en http://localhost:${PORT}`);
 });
-
+console.log(`Servidor express escuchando en http://localhost:${PORT} - PID WORKER ${process.pid} sistema operativo ${process.platform} con ${numCPUs} funcionando`)
 server.on('error', error => {
     console.error('Error de servidor: ', error);
 });
